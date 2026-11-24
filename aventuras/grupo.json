@@ -1,0 +1,94 @@
+{
+  "_leeme": "Demostración del módulo 'grupo' (motor 2.0-alfa). Cada personaje tiene sus propias estadísticas y objetos; lo común (el oro) va en 'estadisticas'. 'quien' elige a quién afecta una condición o un efecto: un personaje, 'lider', 'todos' o 'alguno' (solo condiciones). La emboscada final muestra el módulo 'combate_grupo'.",
+  "formato": 1,
+  "modulos": ["grupo", "habilidades", "combate_grupo", "experiencia"],
+  "etiquetas": { "xp": "XP", "nivel": "Nivel", "energia": "Energía", "vida": "Vida", "fuerza": "Fuerza", "defensa": "Defensa", "velocidad": "Velocidad", "magia": "Magia", "destreza": "Destreza", "oro": "Oro" },
+  "meta": { "id": "grupo_demo", "titulo": "El paso del desfiladero", "inicio": "campamento" },
+  "estadisticas": { "oro": 10 },
+  "grupo": {
+    "miembros": {
+      "aria":  { "nombre": "Aria",  "stats": { "vida": 14, "fuerza": 2, "defensa": 1, "velocidad": 5, "energia": 4 }, "objetos": ["cuerda"], "habilidades": ["golpe_certero"] },
+      "bruno": { "nombre": "Bruno", "stats": { "vida": 22, "fuerza": 5, "defensa": 2, "velocidad": 2 },   "objetos": ["pocion"] },
+      "clara": { "nombre": "Clara", "stats": { "vida": 16, "fuerza": 1, "defensa": 0, "velocidad": 3, "magia": 4, "energia": 6 }, "objetos": [], "habilidades": ["curar"] }
+    },
+    "inicial": ["aria", "bruno"]
+  },
+  "objetos": {
+    "cuerda": { "nombre": "Cuerda" },
+    "pocion": { "nombre": "Poción", "usable": true, "efectos": [ { "tipo": "mod_stat", "stat": "vida", "valor": 8 } ] }
+  },
+  "habilidades": {
+    "golpe_certero": { "nombre": "Golpe certero", "coste": { "stat": "energia", "cantidad": 2 }, "dano": 6 },
+    "curar": { "nombre": "Curar", "coste": { "stat": "energia", "cantidad": 2 },
+               "efectos": [ { "tipo": "mod_stat", "quien": "todos", "stat": "vida", "valor": 4 } ] }
+  },
+  "experiencia": {
+    "niveles": [
+      { "xp": 10, "mejoras": { "vida": 4, "fuerza": 1 }, "mensaje": "Os sentís más fuertes." },
+      { "xp": 30, "mejoras": { "vida": 4, "defensa": 1 } }
+    ]
+  },
+  "enemigos": {
+    "lobo": { "nombre": "Lobo", "vida": 10, "ataque": 3, "defensa": 0, "velocidad": 4, "xp": 4,
+              "recompensa": [ { "tipo": "mod_stat", "stat": "oro", "valor": 2 } ] }
+  },
+  "nodos": {
+    "campamento": {
+      "_nota": "texto_si con 'en_grupo'; un efecto con quien 'todos' (la hoguera cura a cada personaje); unirse (en la escena siguiente).",
+      "texto": "Acampáis al borde del desfiladero. Tenéis {oro} monedas en común.",
+      "texto_si": [ { "condicion": { "tipo": "en_grupo", "id": "clara" }, "texto": "Clara remueve las brasas con aire distraído." } ],
+      "opciones": [
+        { "texto": "Hablar con la viajera", "condicion": { "tipo": "no", "cond": { "tipo": "en_grupo", "id": "clara" } }, "destino": "viajera" },
+        { "texto": "Calentaros junto a la hoguera",
+          "condicion": { "tipo": "no_flag", "flag": "hoguera" },
+          "efectos": [ { "tipo": "mod_stat", "quien": "todos", "stat": "vida", "valor": 3 }, { "tipo": "mod_stat", "quien": "todos", "stat": "energia", "valor": 2 }, { "tipo": "flag", "flag": "hoguera" },
+                       { "tipo": "mensaje", "texto": "El calor os reconforta a todos." } ] },
+        { "texto": "Entrenar un rato con Bruno",
+          "condicion": { "tipo": "no_flag", "flag": "entrenado" },
+          "efectos": [ { "tipo": "aprender_habilidad", "quien": "bruno", "habilidad": "golpe_certero" },
+                       { "tipo": "mod_stat", "quien": "bruno", "stat": "energia", "valor": 4 }, { "tipo": "flag", "flag": "entrenado" } ] },
+        { "texto": "Acercaros al desfiladero", "destino": "desfiladero" }
+      ]
+    },
+    "viajera": {
+      "texto": "Una viajera de ojos curiosos os observa. Dice llamarse Clara y conocer la senda.",
+      "opciones": [
+        { "texto": "Invitarla a uniros", "efectos": [ { "tipo": "unirse", "id": "clara" } ], "destino": "campamento" },
+        { "texto": "Dejarla en paz", "destino": "campamento" }
+      ]
+    },
+    "desfiladero": {
+      "_nota": "Inventarios individuales: la cuerda la lleva Aria y se puede pasar a Bruno. tiene_objeto sin 'quien' mira a todo el grupo; stat_min con quien mira a un personaje concreto.",
+      "texto": "Un abismo corta el camino. Al otro lado se ve un sendero.",
+      "opciones": [
+        { "texto": "Pasarle la cuerda a Bruno",
+          "condicion": { "tipo": "tiene_objeto", "id": "cuerda", "quien": "aria" },
+          "efectos": [ { "tipo": "quitar_objeto", "id": "cuerda", "quien": "aria" }, { "tipo": "dar_objeto", "id": "cuerda", "quien": "bruno" } ] },
+        { "texto": "Cruzar usando la cuerda",
+          "condicion": { "tipo": "tiene_objeto", "id": "cuerda" },
+          "efectos": [ { "tipo": "mod_stat", "quien": "todos", "stat": "vida", "valor": -2 },
+                       { "tipo": "mensaje", "texto": "La cuerda os raspa las manos, pero cruzáis." } ],
+          "destino": "otro_lado" },
+        { "texto": "Pedirle a Clara que os cruce con un conjuro",
+          "condicion": { "tipo": "y", "todas": [ { "tipo": "en_grupo", "id": "clara" }, { "tipo": "stat_min", "quien": "clara", "stat": "magia", "valor": 3 } ] },
+          "destino": "otro_lado" },
+        { "texto": "Volver al campamento", "destino": "campamento" }
+      ]
+    },
+    "otro_lado": {
+      "_nota": "al_entrar con dar_xp: la historia también puede dar experiencia (la reciben los que siguen en pie).",
+      "al_entrar": [ { "tipo": "dar_xp", "cantidad": 2 } ],
+      "texto": "Llegáis sanos al sendero, con {oro} monedas en la bolsa común. Entre las rocas se oyen gruñidos.",
+      "opciones": [ { "texto": "Seguir el sendero", "destino": "emboscada" } ]
+    },
+    "emboscada": {
+      "_nota": "Combate de grupo (módulo 'combate_grupo'): lista de enemigos (uno puede repetirse), iniciativa por velocidad, el jugador elige acción y objetivo y los enemigos atacan a un personaje al azar. Destinos de victoria, derrota y huida.",
+      "tipo": "combate_grupo", "enemigos": ["lobo", "lobo", "lobo"],
+      "texto": "Tres lobos hambrientos os cierran el paso.",
+      "victoria": "final_victoria", "derrota": "final_derrota", "huida": "final_huida"
+    },
+    "final_victoria": { "texto": "Los lobos huyen aullando y el sendero queda libre. Tenéis {oro} monedas.", "fin": true },
+    "final_derrota": { "texto": "El grupo cae entre las rocas. Fin de la aventura.", "fin": true },
+    "final_huida": { "texto": "Escapáis por el sendero, con el corazón a mil.", "fin": true }
+  }
+}

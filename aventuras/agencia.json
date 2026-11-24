@@ -1,0 +1,2996 @@
+{
+  "_leeme": "Prototipo de 'Unidad Aurora' (agencia de espionaje; 80 fondos iniciales, gastos fijos de 1 al día y billetes de ida por equipo; sin fondos se pierde 1 punto al día): 4 agentes, 3 misiones, un chaleco y unas ganzúas como equipo, 2 habilidades y puntuación por eficiencia. Probar el ciclo completo antes de ampliarlo. Mejor mandar el equipo justo: los puestos (cara, infiltrado, conductor, tirador) deciden qué opciones aparecen, y un equipo pequeño da puntos extra en las misiones que lo permiten.",
+  "formato": 1,
+  "modulos": [
+    "grupo",
+    "puestos",
+    "habilidades",
+    "experiencia",
+    "tiempo",
+    "combate_grupo"
+  ],
+  "meta": {
+    "id": "agencia_aurora",
+    "titulo": "Unidad Aurora",
+    "inicio": "intro"
+  },
+  "estadisticas": {
+    "oro": 80,
+    "puntos": 0,
+    "equipo": 1
+  },
+  "etiquetas": {
+    "oro": "Fondos",
+    "puntos": "Puntos",
+    "equipo": "Equipo",
+    "dia": "Día",
+    "vida": "Vida",
+    "fuerza": "Fuerza",
+    "defensa": "Defensa",
+    "velocidad": "Velocidad",
+    "sigilo": "Sigilo",
+    "labia": "Labia",
+    "conduccion": "Conducción",
+    "punteria": "Puntería",
+    "energia": "Energía",
+    "xp": "XP",
+    "nivel": "Nivel"
+  },
+  "objetos": {
+    "ganzuas": {
+      "nombre": "Juego de ganzúas"
+    },
+    "chaleco": {
+      "nombre": "Chaleco antibalas",
+      "usable": true,
+      "efectos": [
+        {
+          "tipo": "mod_stat",
+          "stat": "defensa",
+          "valor": 2
+        }
+      ]
+    }
+  },
+  "enemigos": {
+    "esbirro": {
+      "nombre": "Esbirro",
+      "vida": 9,
+      "ataque": 3,
+      "defensa": 1,
+      "velocidad": 3,
+      "xp": 3
+    },
+    "jefe_banda": {
+      "nombre": "Jefe de la banda",
+      "vida": 14,
+      "ataque": 4,
+      "defensa": 2,
+      "velocidad": 3,
+      "xp": 5
+    }
+  },
+  "grupo": {
+    "miembros": {
+      "lucia": {
+        "nombre": "Lucía",
+        "stats": {
+          "vida": 18,
+          "fuerza": 3,
+          "defensa": 2,
+          "velocidad": 4,
+          "sigilo": 3,
+          "labia": 4,
+          "conduccion": 2,
+          "punteria": 3,
+          "energia": 3
+        },
+        "habilidades": [
+          "disparo_certero"
+        ]
+      },
+      "marcos": {
+        "nombre": "Marcos",
+        "stats": {
+          "vida": 14,
+          "fuerza": 2,
+          "defensa": 1,
+          "velocidad": 6,
+          "sigilo": 5,
+          "labia": 2,
+          "conduccion": 2,
+          "punteria": 2,
+          "energia": 3
+        },
+        "objetos": [
+          "ganzuas"
+        ]
+      },
+      "nadia": {
+        "nombre": "Nadia",
+        "stats": {
+          "vida": 15,
+          "fuerza": 1,
+          "defensa": 1,
+          "velocidad": 5,
+          "sigilo": 2,
+          "labia": 3,
+          "conduccion": 5,
+          "punteria": 1,
+          "energia": 4
+        },
+        "habilidades": [
+          "primeros_auxilios"
+        ]
+      },
+      "ivan": {
+        "nombre": "Iván",
+        "stats": {
+          "vida": 17,
+          "fuerza": 4,
+          "defensa": 2,
+          "velocidad": 3,
+          "sigilo": 2,
+          "labia": 1,
+          "conduccion": 1,
+          "punteria": 5,
+          "energia": 3
+        },
+        "habilidades": [
+          "disparo_certero"
+        ]
+      }
+    },
+    "inicial": [
+      "lucia"
+    ]
+  },
+  "puestos": {
+    "max_por_miembro": 1,
+    "lista": {
+      "cara": {
+        "nombre": "Cara (negociación)",
+        "capacidad": 1,
+        "asignado": [
+          "lucia"
+        ]
+      },
+      "infiltrado": {
+        "nombre": "Infiltrado",
+        "capacidad": 1
+      },
+      "conductor": {
+        "nombre": "Conductor",
+        "capacidad": 1
+      },
+      "tirador": {
+        "nombre": "Tirador",
+        "capacidad": 1
+      }
+    }
+  },
+  "habilidades": {
+    "disparo_certero": {
+      "nombre": "Disparo certero",
+      "coste": {
+        "stat": "energia",
+        "cantidad": 2
+      },
+      "dano": 6
+    },
+    "primeros_auxilios": {
+      "nombre": "Primeros auxilios",
+      "coste": {
+        "stat": "energia",
+        "cantidad": 2
+      },
+      "efectos": [
+        {
+          "tipo": "mod_stat",
+          "stat": "vida",
+          "valor": 4,
+          "quien": "todos"
+        }
+      ]
+    }
+  },
+  "experiencia": {
+    "niveles": [
+      {
+        "xp": 6,
+        "mejoras": {
+          "vida": 3
+        },
+        "mensaje": "La experiencia de campo se nota."
+      },
+      {
+        "xp": 14,
+        "mejoras": {
+          "vida": 3,
+          "fuerza": 1
+        }
+      }
+    ]
+  },
+  "tiempo": {
+    "dia_inicial": 1,
+    "velocidad": {
+      "base": 3
+    },
+    "consumos": [
+      {
+        "stat": "oro",
+        "por_dia": 1,
+        "si_falta": [
+          {
+            "tipo": "mod_stat",
+            "stat": "puntos",
+            "valor": -1
+          },
+          {
+            "tipo": "mensaje",
+            "texto": "Sin fondos: la agencia pierde credibilidad."
+          }
+        ]
+      }
+    ],
+    "plazos": [
+      {
+        "dia": 24,
+        "efectos": [
+          {
+            "tipo": "mensaje",
+            "texto": "Se acaba el plazo del director."
+          },
+          {
+            "tipo": "ir_a",
+            "destino": "informe_final"
+          }
+        ]
+      }
+    ]
+  },
+  "nodos": {
+    "intro": {
+      "texto": "Unidad Aurora es una agencia discreta de inteligencia que depende de un director que desconfía de su presupuesto. Tienes hasta el día 24 para demostrar que sirve de algo. Con pocos fondos, tendrás que elegir bien a quién envías a cada misión y cuánto gastas: la agencia cuesta 1 fondo al día, y cada misión exige pagar al salir los billetes de todo el equipo. Sin fondos, la agencia pierde credibilidad.\nLucía Vega, tu mejor negociadora, y Marcos, un infiltrado discreto, forman la plantilla. Por ahora, solo Lucía está de guardia.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "contratado_lucia"
+        },
+        {
+          "tipo": "flag",
+          "flag": "contratado_marcos"
+        }
+      ],
+      "_nota": "Escena inicial de un solo uso: marca quiénes están contratados al empezar (el motor no tiene flags iniciales).",
+      "opciones": [
+        {
+          "texto": "Entrar en la sede",
+          "destino": "sede"
+        }
+      ]
+    },
+    "sede": {
+      "texto": "Día {dia}. Fondos: {oro}. Puntos: {puntos}. La sede huele a café frío y a papeles. El director espera resultados antes del día 24.",
+      "texto_si": [
+        {
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "o",
+                "alguna": [
+                  {
+                    "tipo": "flag",
+                    "flag": "m1_hecha"
+                  },
+                  {
+                    "tipo": "stat_min",
+                    "stat": "dia",
+                    "valor": 15
+                  }
+                ]
+              },
+              {
+                "tipo": "o",
+                "alguna": [
+                  {
+                    "tipo": "flag",
+                    "flag": "m2_hecha"
+                  },
+                  {
+                    "tipo": "stat_min",
+                    "stat": "dia",
+                    "valor": 17
+                  }
+                ]
+              },
+              {
+                "tipo": "o",
+                "alguna": [
+                  {
+                    "tipo": "flag",
+                    "flag": "m3_hecha"
+                  },
+                  {
+                    "tipo": "stat_min",
+                    "stat": "dia",
+                    "valor": 19
+                  }
+                ]
+              }
+            ]
+          },
+          "texto": "Ya no queda ningún asunto pendiente sobre la mesa. El director espera tu informe."
+        }
+      ],
+      "_nota": "Sede central: se vuelve a ella entre misiones. Los premios de cada acción llevan flag para no repetirse.",
+      "opciones": [
+        {
+          "texto": "Ver el tablero de misiones",
+          "destino": "tablero"
+        },
+        {
+          "texto": "Formar el equipo",
+          "destino": "equipo_menu"
+        },
+        {
+          "texto": "Reclutamiento",
+          "destino": "reclutar"
+        },
+        {
+          "texto": "Intendencia",
+          "destino": "intendencia"
+        },
+        {
+          "texto": "Entrenamiento",
+          "destino": "entrenar"
+        },
+        {
+          "texto": "Descansar un día en la sede",
+          "efectos": [
+            {
+              "tipo": "pasar_dias",
+              "dias": 1
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "energia",
+              "valor": 2,
+              "quien": "todos"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "vida",
+              "valor": 4,
+              "quien": "todos"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Un día tranquilo: el equipo recupera fuerzas."
+            }
+          ]
+        },
+        {
+          "texto": "Entregar el informe al director",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "o",
+                "alguna": [
+                  {
+                    "tipo": "flag",
+                    "flag": "m1_hecha"
+                  },
+                  {
+                    "tipo": "stat_min",
+                    "stat": "dia",
+                    "valor": 15
+                  }
+                ]
+              },
+              {
+                "tipo": "o",
+                "alguna": [
+                  {
+                    "tipo": "flag",
+                    "flag": "m2_hecha"
+                  },
+                  {
+                    "tipo": "stat_min",
+                    "stat": "dia",
+                    "valor": 17
+                  }
+                ]
+              },
+              {
+                "tipo": "o",
+                "alguna": [
+                  {
+                    "tipo": "flag",
+                    "flag": "m3_hecha"
+                  },
+                  {
+                    "tipo": "stat_min",
+                    "stat": "dia",
+                    "valor": 19
+                  }
+                ]
+              }
+            ]
+          },
+          "destino": "informe_final"
+        }
+      ]
+    },
+    "tablero": {
+      "texto": "Sobre la mesa hay carpetas con asuntos pendientes. Cada una trae un plazo y poco más.",
+      "opciones": [
+        {
+          "texto": "Lisboa: un sobre que va a cambiar de manos",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "no_flag",
+                "flag": "m1_hecha"
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "dia",
+                "valor": 14
+              }
+            ]
+          },
+          "destino": "m1_brief"
+        },
+        {
+          "texto": "Estambul: un contacto al que hay que seguir",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "no_flag",
+                "flag": "m2_hecha"
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "dia",
+                "valor": 3
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "dia",
+                "valor": 16
+              }
+            ]
+          },
+          "destino": "m2_brief"
+        },
+        {
+          "texto": "Róterdam: un maletín en un almacén del puerto",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "no_flag",
+                "flag": "m3_hecha"
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "dia",
+                "valor": 5
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "dia",
+                "valor": 18
+              }
+            ]
+          },
+          "destino": "m3_brief"
+        },
+        {
+          "texto": "Volver",
+          "destino": "sede"
+        }
+      ]
+    },
+    "equipo_menu": {
+      "texto": "En la pizarra figuran los agentes disponibles. Equipo actual: {equipo}. Cada agente cubre su puesto habitual (panel «Puestos»).",
+      "_nota": "Formar el equipo = unirse/abandonar. El contador 'equipo' se mantiene a mano en cada cambio. Siempre queda al menos un agente.",
+      "opciones": [
+        {
+          "texto": "Sumar a Lucía al equipo",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "flag",
+                "flag": "contratado_lucia"
+              },
+              {
+                "tipo": "no",
+                "cond": {
+                  "tipo": "en_grupo",
+                  "id": "lucia"
+                }
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "unirse",
+              "id": "lucia"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "equipo",
+              "valor": 1
+            },
+            {
+              "tipo": "asignar_puesto",
+              "puesto": "cara",
+              "quien": "lucia"
+            }
+          ]
+        },
+        {
+          "texto": "Retirar a Lucía del equipo",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "en_grupo",
+                "id": "lucia"
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "equipo",
+                "valor": 2
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "abandonar",
+              "id": "lucia"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "equipo",
+              "valor": -1
+            }
+          ]
+        },
+        {
+          "texto": "Sumar a Marcos al equipo",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "flag",
+                "flag": "contratado_marcos"
+              },
+              {
+                "tipo": "no",
+                "cond": {
+                  "tipo": "en_grupo",
+                  "id": "marcos"
+                }
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "unirse",
+              "id": "marcos"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "equipo",
+              "valor": 1
+            },
+            {
+              "tipo": "asignar_puesto",
+              "puesto": "infiltrado",
+              "quien": "marcos"
+            }
+          ]
+        },
+        {
+          "texto": "Retirar a Marcos del equipo",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "en_grupo",
+                "id": "marcos"
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "equipo",
+                "valor": 2
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "abandonar",
+              "id": "marcos"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "equipo",
+              "valor": -1
+            }
+          ]
+        },
+        {
+          "texto": "Sumar a Nadia al equipo",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "flag",
+                "flag": "contratado_nadia"
+              },
+              {
+                "tipo": "no",
+                "cond": {
+                  "tipo": "en_grupo",
+                  "id": "nadia"
+                }
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "unirse",
+              "id": "nadia"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "equipo",
+              "valor": 1
+            },
+            {
+              "tipo": "asignar_puesto",
+              "puesto": "conductor",
+              "quien": "nadia"
+            }
+          ]
+        },
+        {
+          "texto": "Retirar a Nadia del equipo",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "en_grupo",
+                "id": "nadia"
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "equipo",
+                "valor": 2
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "abandonar",
+              "id": "nadia"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "equipo",
+              "valor": -1
+            }
+          ]
+        },
+        {
+          "texto": "Sumar a Iván al equipo",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "flag",
+                "flag": "contratado_ivan"
+              },
+              {
+                "tipo": "no",
+                "cond": {
+                  "tipo": "en_grupo",
+                  "id": "ivan"
+                }
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "unirse",
+              "id": "ivan"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "equipo",
+              "valor": 1
+            },
+            {
+              "tipo": "asignar_puesto",
+              "puesto": "tirador",
+              "quien": "ivan"
+            }
+          ]
+        },
+        {
+          "texto": "Retirar a Iván del equipo",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "en_grupo",
+                "id": "ivan"
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "equipo",
+                "valor": 2
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "abandonar",
+              "id": "ivan"
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "equipo",
+              "valor": -1
+            }
+          ]
+        },
+        {
+          "texto": "Volver",
+          "destino": "sede"
+        }
+      ]
+    },
+    "reclutar": {
+      "texto": "Dos candidatos esperan en la sala de entrevistas.\nNadia lleva años conduciendo en rallies y huidas poco recomendables; además tiene formación sanitaria.\nIván es un exmilitar de pocas palabras con una puntería poco común.",
+      "opciones": [
+        {
+          "texto": "Contratar a Nadia (10 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 10
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "contratado_nadia"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -10
+            },
+            {
+              "tipo": "flag",
+              "flag": "contratado_nadia"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Nadia firma el contrato."
+            }
+          ]
+        },
+        {
+          "texto": "Contratar a Iván (12 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 12
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "contratado_ivan"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -12
+            },
+            {
+              "tipo": "flag",
+              "flag": "contratado_ivan"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Iván firma el contrato."
+            }
+          ]
+        },
+        {
+          "texto": "Volver",
+          "destino": "sede"
+        }
+      ]
+    },
+    "intendencia": {
+      "texto": "El intendente te enseña lo poco que cabe en el presupuesto. Los chalecos sirven para quien se los ponga (botón «Usar» en su ficha, estando en el equipo).",
+      "opciones": [
+        {
+          "texto": "Comprar un chaleco para Lucía (6 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 6
+              },
+              {
+                "tipo": "flag",
+                "flag": "contratado_lucia"
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "chaleco_lucia"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -6
+            },
+            {
+              "tipo": "dar_objeto",
+              "id": "chaleco",
+              "quien": "lucia"
+            },
+            {
+              "tipo": "flag",
+              "flag": "chaleco_lucia"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "El chaleco queda guardado en la ficha de Lucía."
+            }
+          ]
+        },
+        {
+          "texto": "Comprar un chaleco para Marcos (6 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 6
+              },
+              {
+                "tipo": "flag",
+                "flag": "contratado_marcos"
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "chaleco_marcos"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -6
+            },
+            {
+              "tipo": "dar_objeto",
+              "id": "chaleco",
+              "quien": "marcos"
+            },
+            {
+              "tipo": "flag",
+              "flag": "chaleco_marcos"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "El chaleco queda guardado en la ficha de Marcos."
+            }
+          ]
+        },
+        {
+          "texto": "Comprar un chaleco para Nadia (6 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 6
+              },
+              {
+                "tipo": "flag",
+                "flag": "contratado_nadia"
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "chaleco_nadia"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -6
+            },
+            {
+              "tipo": "dar_objeto",
+              "id": "chaleco",
+              "quien": "nadia"
+            },
+            {
+              "tipo": "flag",
+              "flag": "chaleco_nadia"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "El chaleco queda guardado en la ficha de Nadia."
+            }
+          ]
+        },
+        {
+          "texto": "Comprar un chaleco para Iván (6 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 6
+              },
+              {
+                "tipo": "flag",
+                "flag": "contratado_ivan"
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "chaleco_ivan"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -6
+            },
+            {
+              "tipo": "dar_objeto",
+              "id": "chaleco",
+              "quien": "ivan"
+            },
+            {
+              "tipo": "flag",
+              "flag": "chaleco_ivan"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "El chaleco queda guardado en la ficha de Iván."
+            }
+          ]
+        },
+        {
+          "texto": "Volver",
+          "destino": "sede"
+        }
+      ]
+    },
+    "entrenar": {
+      "texto": "Un par de salas de la sede sirven para prácticas.",
+      "opciones": [
+        {
+          "texto": "Curso de sigilo para Marcos (6 fondos, 2 días)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 6
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "curso_marcos"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -6
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "sigilo",
+              "valor": 1,
+              "quien": "marcos"
+            },
+            {
+              "tipo": "flag",
+              "flag": "curso_marcos"
+            },
+            {
+              "tipo": "pasar_dias",
+              "dias": 2
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Marcos domina un poco más el arte de pasar desapercibido."
+            }
+          ]
+        },
+        {
+          "texto": "Prácticas de tiro con Iván (6 fondos, 2 días)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 6
+              },
+              {
+                "tipo": "flag",
+                "flag": "contratado_ivan"
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "curso_ivan"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -6
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "punteria",
+              "valor": 1,
+              "quien": "ivan"
+            },
+            {
+              "tipo": "flag",
+              "flag": "curso_ivan"
+            },
+            {
+              "tipo": "pasar_dias",
+              "dias": 2
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Iván afina la puntería."
+            }
+          ]
+        },
+        {
+          "texto": "Clases de idiomas para Lucía (5 fondos, 1 día)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 5
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "curso_lucia"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -5
+            },
+            {
+              "tipo": "mod_stat",
+              "stat": "labia",
+              "valor": 1,
+              "quien": "lucia"
+            },
+            {
+              "tipo": "flag",
+              "flag": "curso_lucia"
+            },
+            {
+              "tipo": "pasar_dias",
+              "dias": 1
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Lucía gana soltura en dos idiomas más."
+            }
+          ]
+        },
+        {
+          "texto": "Volver",
+          "destino": "sede"
+        }
+      ]
+    },
+    "m1_brief": {
+      "texto": "Un correo diplomático entregará un sobre a un intermediario en un café de Lisboa. La agencia necesita ver su contenido antes de que cambie de manos.",
+      "opciones": [
+        {
+          "texto": "Viajar a Lisboa (8 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 1
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 1
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 8
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -8
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 6
+            }
+          ],
+          "destino": "m1_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 1
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 1
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 7
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 8 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Lisboa (10 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 2
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 2
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 10
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -10
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 6
+            }
+          ],
+          "destino": "m1_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 2
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 2
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 9
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 10 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Lisboa (12 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 3
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 3
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 12
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -12
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 6
+            }
+          ],
+          "destino": "m1_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 3
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 3
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 11
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 12 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Lisboa (14 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 4
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 4
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 14
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -14
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 6
+            }
+          ],
+          "destino": "m1_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 4
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 4
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 13
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 14 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Dejarlo para más tarde",
+          "destino": "tablero"
+        }
+      ]
+    },
+    "m1_llegada": {
+      "texto": "El café está medio vacío. El intermediario lee el periódico junto a la ventana, con un maletín a los pies. El correo llegará en unos minutos.",
+      "opciones": [
+        {
+          "texto": "Cambiar el sobre por una copia en cuanto llegue el correo",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "sigilo",
+            "valor": 4,
+            "quien": "puesto:infiltrado"
+          },
+          "destino": "m1_exito"
+        },
+        {
+          "texto": "Entretener al intermediario con conversación mientras otro actúa",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "labia",
+            "valor": 3,
+            "quien": "puesto:cara"
+          },
+          "destino": "m1_parcial"
+        },
+        {
+          "texto": "Acercarte a la mesa a ver qué pasa",
+          "condicion": {
+            "tipo": "no",
+            "cond": {
+              "tipo": "o",
+              "alguna": [
+                {
+                  "tipo": "stat_min",
+                  "stat": "sigilo",
+                  "valor": 4,
+                  "quien": "puesto:infiltrado"
+                },
+                {
+                  "tipo": "stat_min",
+                  "stat": "labia",
+                  "valor": 3,
+                  "quien": "puesto:cara"
+                }
+              ]
+            }
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "El intermediario te mira con desconfianza y se guarda el sobre antes de tiempo."
+            }
+          ],
+          "destino": "m1_fracaso"
+        }
+      ]
+    },
+    "m1_exito": {
+      "texto": "Cambias el sobre sin que nadie lo note y fotografías su contenido en el servicio. Una operación limpia.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m1_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "oro",
+          "valor": 8
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": 6
+        },
+        {
+          "tipo": "dar_xp",
+          "cantidad": 3
+        }
+      ],
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "condicion": {
+            "tipo": "stat_max",
+            "stat": "equipo",
+            "valor": 1
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "puntos",
+              "valor": 3
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Misión eficiente: un solo agente era suficiente."
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 6
+            }
+          ],
+          "destino": "sede"
+        },
+        {
+          "texto": "Regresar a la sede",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "equipo",
+            "valor": 2
+          },
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 6
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "m1_parcial": {
+      "texto": "Consigues distraerlo, pero solo logras ver la primera página del documento. Es algo, aunque no es todo.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m1_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "oro",
+          "valor": 4
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": 3
+        },
+        {
+          "tipo": "dar_xp",
+          "cantidad": 2
+        }
+      ],
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 6
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "m1_fracaso": {
+      "texto": "El intermediario se marcha con su sobre y la agencia se queda sin nada. Vuelves con las manos vacías.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m1_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": -2
+        }
+      ],
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 6
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "m2_brief": {
+      "texto": "Un contacto de una red de contrabando se reunirá con alguien en Estambul. Hay que averiguar a dónde va después. Se mueve rápido y no le gustan los taxis.",
+      "opciones": [
+        {
+          "texto": "Viajar a Estambul (11 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 1
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 1
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 11
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -11
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 8
+            }
+          ],
+          "destino": "m2_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 1
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 1
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 10
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 11 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Estambul (14 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 2
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 2
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 14
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -14
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 8
+            }
+          ],
+          "destino": "m2_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 2
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 2
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 13
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 14 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Estambul (17 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 3
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 3
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 17
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -17
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 8
+            }
+          ],
+          "destino": "m2_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 3
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 3
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 16
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 17 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Estambul (20 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 4
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 4
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 20
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -20
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 8
+            }
+          ],
+          "destino": "m2_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 4
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 4
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 19
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 20 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Dejarlo para más tarde",
+          "destino": "tablero"
+        }
+      ]
+    },
+    "m2_llegada": {
+      "texto": "El contacto sale del hotel y se pierde en el bazar. Tienes pocos segundos para decidir cómo seguirlo.",
+      "opciones": [
+        {
+          "texto": "Seguirlo a distancia entre los puestos",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "sigilo",
+            "valor": 4,
+            "quien": "puesto:infiltrado"
+          },
+          "efectos": [
+            {
+              "tipo": "flag",
+              "flag": "m2_pie"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Lo mantienes a la vista sin que se dé cuenta."
+            }
+          ],
+          "destino": "m2_huida"
+        },
+        {
+          "texto": "Acercarte a él fingiendo ser un turista perdido",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "labia",
+            "valor": 3,
+            "quien": "puesto:cara"
+          },
+          "efectos": [
+            {
+              "tipo": "flag",
+              "flag": "m2_pie"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Lo entretienes lo justo para saber qué ruta toma."
+            }
+          ],
+          "destino": "m2_huida"
+        },
+        {
+          "texto": "Mantener la distancia y confiar en la suerte",
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "El bazar se traga al contacto. Tendrás que improvisar."
+            }
+          ],
+          "destino": "m2_huida"
+        }
+      ]
+    },
+    "m2_huida": {
+      "texto": "Un coche negro recoge al contacto en una esquina y arranca bruscamente.",
+      "opciones": [
+        {
+          "texto": "Perseguirlo al volante por las calles de la ciudad",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "conduccion",
+            "valor": 4,
+            "quien": "puesto:conductor"
+          },
+          "efectos": [
+            {
+              "tipo": "flag",
+              "flag": "m2_coche"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Esquivas el tráfico con una precisión que da vértigo."
+            }
+          ],
+          "destino": "m2_resolucion"
+        },
+        {
+          "texto": "Disparar a los neumáticos del coche",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "punteria",
+            "valor": 5,
+            "quien": "puesto:tirador"
+          },
+          "efectos": [
+            {
+              "tipo": "flag",
+              "flag": "m2_coche"
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Un disparo certero deja al coche inmovilizado."
+            }
+          ],
+          "destino": "m2_resolucion"
+        },
+        {
+          "texto": "Seguirlo en un taxi",
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "El taxista se pierde en el tráfico y el coche negro desaparece."
+            }
+          ],
+          "destino": "m2_resolucion"
+        }
+      ]
+    },
+    "m2_resolucion": {
+      "texto": "El humo del tráfico se disipa y toca contar lo que has conseguido.",
+      "opciones": [
+        {
+          "texto": "Seguir adelante",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "flag",
+                "flag": "m2_pie"
+              },
+              {
+                "tipo": "flag",
+                "flag": "m2_coche"
+              }
+            ]
+          },
+          "destino": "m2_exito"
+        },
+        {
+          "texto": "Seguir adelante",
+          "condicion": {
+            "tipo": "o",
+            "alguna": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "flag",
+                    "flag": "m2_pie"
+                  },
+                  {
+                    "tipo": "no_flag",
+                    "flag": "m2_coche"
+                  }
+                ]
+              },
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "no_flag",
+                    "flag": "m2_pie"
+                  },
+                  {
+                    "tipo": "flag",
+                    "flag": "m2_coche"
+                  }
+                ]
+              }
+            ]
+          },
+          "destino": "m2_parcial"
+        },
+        {
+          "texto": "Seguir adelante",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "no_flag",
+                "flag": "m2_pie"
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "m2_coche"
+              }
+            ]
+          },
+          "destino": "m2_fracaso"
+        }
+      ]
+    },
+    "m2_exito": {
+      "texto": "Sigues al contacto hasta un almacén junto al Bósforo, anotas matrículas y caras y regresas sin que nadie sepa que estuviste allí.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m2_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "oro",
+          "valor": 10
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": 8
+        },
+        {
+          "tipo": "dar_xp",
+          "cantidad": 4
+        }
+      ],
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "condicion": {
+            "tipo": "stat_max",
+            "stat": "equipo",
+            "valor": 2
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "puntos",
+              "valor": 3
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Misión eficiente: el equipo justo para el trabajo."
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 8
+            }
+          ],
+          "destino": "sede"
+        },
+        {
+          "texto": "Regresar a la sede",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "equipo",
+            "valor": 3
+          },
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 8
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "m2_parcial": {
+      "texto": "Consigues parte de lo que buscabas: una dirección, un nombre. Falta lo demás.",
+      "texto_si": [
+        {
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "flag",
+                "flag": "m2_pie"
+              },
+              {
+                "tipo": "no_flag",
+                "flag": "m2_coche"
+              }
+            ]
+          },
+          "texto": "Lo seguiste bien por el bazar, pero se os escapó en el coche."
+        },
+        {
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "no_flag",
+                "flag": "m2_pie"
+              },
+              {
+                "tipo": "flag",
+                "flag": "m2_coche"
+              }
+            ]
+          },
+          "texto": "No lo viste salir del hotel, pero lo cazaste en plena carretera."
+        }
+      ],
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m2_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "oro",
+          "valor": 5
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": 4
+        },
+        {
+          "tipo": "dar_xp",
+          "cantidad": 2
+        }
+      ],
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 8
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "m2_fracaso": {
+      "texto": "Lo perdiste en el bazar y se escapó en el coche. La pista se enfría y regresas con poco que contar.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m2_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": -2
+        }
+      ],
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 8
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "m3_brief": {
+      "texto": "Un maletín con documentos comprometedores cambiará de manos en un almacén del puerto de Róterdam. Lo custodia una banda con pocas ganas de conversación.",
+      "opciones": [
+        {
+          "texto": "Viajar a Róterdam (13 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 1
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 1
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 13
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -13
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "m3_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 1
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 1
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 12
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 13 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Róterdam (16 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 2
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 2
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 16
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -16
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "m3_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 2
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 2
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 15
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 16 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Róterdam (19 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 3
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 3
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 19
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -19
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "m3_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 3
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 3
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 18
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 19 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Viajar a Róterdam (22 fondos)",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 4
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 4
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "oro",
+                "valor": 22
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "oro",
+              "valor": -22
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "m3_llegada"
+        },
+        {
+          "texto": "Ver cuánto costaría el viaje",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "y",
+                "todas": [
+                  {
+                    "tipo": "stat_min",
+                    "stat": "equipo",
+                    "valor": 4
+                  },
+                  {
+                    "tipo": "stat_max",
+                    "stat": "equipo",
+                    "valor": 4
+                  }
+                ]
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "oro",
+                "valor": 21
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Los billetes costarían 22 fondos y la caja no da para tanto."
+            }
+          ]
+        },
+        {
+          "texto": "Dejarlo para más tarde",
+          "destino": "tablero"
+        }
+      ]
+    },
+    "m3_llegada": {
+      "texto": "El almacén es una nave larga con una puerta de servicio y una claraboya rota. Dentro se oyen voces.",
+      "opciones": [
+        {
+          "texto": "Entrar por la claraboya sin ser vistos",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "sigilo",
+            "valor": 5,
+            "quien": "puesto:infiltrado"
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Te cuelas por el techo y te sitúas a sus espaldas."
+            },
+            {
+              "tipo": "flag",
+              "flag": "m3_techo"
+            }
+          ],
+          "destino": "m3_combate_facil"
+        },
+        {
+          "texto": "Presentaros como compradores",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "labia",
+            "valor": 4,
+            "quien": "puesto:cara"
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Os dejan pasar y os guían hasta el jefe de la banda."
+            }
+          ],
+          "destino": "m3_trato"
+        },
+        {
+          "texto": "Forzar la puerta de servicio con ganzúas",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "tiene_objeto",
+                "id": "ganzuas"
+              },
+              {
+                "tipo": "en_grupo",
+                "id": "marcos"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "La cerradura cede casi sin ruido."
+            },
+            {
+              "tipo": "flag",
+              "flag": "m3_ganzua"
+            }
+          ],
+          "destino": "m3_combate_facil"
+        },
+        {
+          "texto": "Distraer a los guardias mientras otro se lleva el maletín",
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "sigilo",
+                "valor": 5,
+                "quien": "puesto:infiltrado"
+              },
+              {
+                "tipo": "stat_min",
+                "stat": "labia",
+                "valor": 3,
+                "quien": "puesto:cara"
+              }
+            ]
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Uno habla, otro se desliza entre las cajas. Nadie mira donde debería."
+            }
+          ],
+          "destino": "m3_limpio"
+        },
+        {
+          "texto": "Entrar a por todas",
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "La puerta salta y alguien da la voz de alarma."
+            }
+          ],
+          "destino": "m3_combate_duro"
+        }
+      ]
+    },
+    "m3_trato": {
+      "texto": "El jefe de la banda quiere ver el dinero antes de enseñar el maletín. Vuestra negociadora sostiene su mirada sin pestañear.",
+      "_nota": "Con labia 5 en el puesto de cara el engaño evita el combate (hace falta entrenar a Lucía); con menos, el jefe descubre los billetes falsos.",
+      "opciones": [
+        {
+          "texto": "Cerrar el trato con aplomo",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "labia",
+            "valor": 5,
+            "quien": "puesto:cara"
+          },
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "Con una calma absoluta, convences al jefe: el maletín cambia de manos sin un solo disparo."
+            }
+          ],
+          "destino": "m3_exito"
+        },
+        {
+          "texto": "Entregar el dinero falso",
+          "efectos": [
+            {
+              "tipo": "mensaje",
+              "texto": "El jefe cuenta los billetes y frunce el ceño: no son de verdad."
+            },
+            {
+              "tipo": "flag",
+              "flag": "m3_engano"
+            }
+          ],
+          "destino": "m3_combate_facil"
+        }
+      ]
+    },
+    "m3_combate_facil": {
+      "tipo": "combate_grupo",
+      "enemigos": [
+        "esbirro",
+        "esbirro"
+      ],
+      "texto": "Dos esbirros guardan el maletín. Empieza el tiroteo.",
+      "texto_si": [
+        {
+          "condicion": {
+            "tipo": "flag",
+            "flag": "m3_techo"
+          },
+          "texto": "Caéis desde la claraboya sobre ellos: no os esperaban."
+        },
+        {
+          "condicion": {
+            "tipo": "flag",
+            "flag": "m3_engano"
+          },
+          "texto": "El jefe da la voz y los esbirros desenfundan, pero los tenéis tan cerca que los pilláis desprevenidos."
+        },
+        {
+          "condicion": {
+            "tipo": "flag",
+            "flag": "m3_ganzua"
+          },
+          "texto": "Entráis por la puerta de servicio y os ven demasiado tarde."
+        }
+      ],
+      "victoria": "m3_exito",
+      "derrota": "m3_fracaso",
+      "huida": "m3_fracaso"
+    },
+    "m3_combate_duro": {
+      "tipo": "combate_grupo",
+      "enemigos": [
+        "esbirro",
+        "esbirro",
+        "esbirro",
+        "jefe_banda"
+      ],
+      "texto": "Tres esbirros y su jefe os esperan con las armas en la mano.",
+      "victoria": "m3_exito",
+      "derrota": "m3_fracaso",
+      "huida": "m3_fracaso"
+    },
+    "m3_exito": {
+      "texto": "El maletín es vuestro. Los documentos que contiene valen más que todo el viaje.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m3_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "oro",
+          "valor": 14
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": 8
+        },
+        {
+          "tipo": "dar_xp",
+          "cantidad": 2
+        }
+      ],
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "condicion": {
+            "tipo": "stat_max",
+            "stat": "equipo",
+            "valor": 3
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "puntos",
+              "valor": 3
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Misión eficiente: un equipo reducido ha bastado."
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "sede"
+        },
+        {
+          "texto": "Regresar a la sede",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "equipo",
+            "valor": 4
+          },
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "m3_limpio": {
+      "texto": "Mientras unos guardias discuten con vuestro «comprador», alguien sale por la claraboya con el maletín. No ha sido necesario disparar ni una vez.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m3_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "oro",
+          "valor": 14
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": 11
+        },
+        {
+          "tipo": "dar_xp",
+          "cantidad": 3
+        }
+      ],
+      "_nota": "Éxito limpio: exige dos puestos cubiertos a la vez (infiltrado y cara), es decir, al menos dos agentes.",
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "condicion": {
+            "tipo": "stat_max",
+            "stat": "equipo",
+            "valor": 3
+          },
+          "efectos": [
+            {
+              "tipo": "mod_stat",
+              "stat": "puntos",
+              "valor": 3
+            },
+            {
+              "tipo": "mensaje",
+              "texto": "Misión eficiente: sin un solo disparo y con un equipo reducido."
+            },
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "sede"
+        },
+        {
+          "texto": "Regresar a la sede",
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "equipo",
+            "valor": 4
+          },
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "m3_fracaso": {
+      "texto": "No conseguís el maletín. Os retiráis con heridas y sin nada que enseñar.",
+      "al_entrar": [
+        {
+          "tipo": "flag",
+          "flag": "m3_hecha"
+        },
+        {
+          "tipo": "mod_stat",
+          "stat": "puntos",
+          "valor": -3
+        }
+      ],
+      "opciones": [
+        {
+          "texto": "Regresar a la sede",
+          "efectos": [
+            {
+              "tipo": "viajar",
+              "distancia": 10
+            }
+          ],
+          "destino": "sede"
+        }
+      ]
+    },
+    "informe_final": {
+      "texto": "El director lee el informe en silencio. Cierras el trimestre el día {dia} con {puntos} puntos y {oro} fondos.",
+      "texto_si": [
+        {
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "puntos",
+            "valor": 28
+          },
+          "texto": "—Esto es una agencia de primera. Tendréis el presupuesto que pidáis."
+        },
+        {
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "puntos",
+                "valor": 18
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "puntos",
+                "valor": 27
+              }
+            ]
+          },
+          "texto": "—Resultados sólidos. Seguiréis un año más."
+        },
+        {
+          "condicion": {
+            "tipo": "y",
+            "todas": [
+              {
+                "tipo": "stat_min",
+                "stat": "puntos",
+                "valor": 8
+              },
+              {
+                "tipo": "stat_max",
+                "stat": "puntos",
+                "valor": 17
+              }
+            ]
+          },
+          "texto": "—No ha estado mal, pero esperaba más."
+        },
+        {
+          "condicion": {
+            "tipo": "stat_max",
+            "stat": "puntos",
+            "valor": 7
+          },
+          "texto": "—Cerramos el departamento. Gracias por todo."
+        },
+        {
+          "condicion": {
+            "tipo": "stat_min",
+            "stat": "oro",
+            "valor": 25
+          },
+          "texto": "Además, has administrado bien los fondos: el director lo anota con una sonrisa."
+        }
+      ],
+      "fin": true
+    }
+  }
+}

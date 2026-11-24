@@ -1,0 +1,58 @@
+{
+  "_leeme": "Demostración del módulo 'mercado' (motor 2.0-alfa), con solo 4 productos a modo de ejemplo. Cada isla valora distinto cada mercancía y los precios varían un poco cada día: compra barato en una y vende caro en la otra. El día 12 termina la temporada y se hace balance (plazo con 'ir_a').",
+  "formato": 1,
+  "modulos": ["mercado", "tiempo"],
+  "meta": { "id": "comercio_demo", "titulo": "El mercader de las islas", "inicio": "muelle_rodas", "protagonista": "Mercader" },
+  "estadisticas": { "oro": 40 },
+  "etiquetas": { "oro": "Oro", "dia": "Día", "vino": "Vino", "aceite": "Aceite", "telas": "Telas", "sal": "Sal" },
+  "tiempo": {
+    "dia_inicial": 1,
+    "velocidad": { "base": 2 },
+    "plazos": [ { "dia": 12, "efectos": [ { "tipo": "mensaje", "texto": "Se acaba la temporada de navegación." }, { "tipo": "ir_a", "destino": "balance" } ] } ]
+  },
+  "mercados": {
+    "moneda": "oro", "margen": 0.2, "fluctuacion": 0.15,
+    "lugares": {
+      "rodas": { "nombre": "Mercado de Rodas", "productos": {
+        "vino":   { "nombre": "Vino",   "base": 6 },
+        "aceite": { "nombre": "Aceite", "base": 11 },
+        "telas":  { "nombre": "Telas",  "base": 24 },
+        "sal":    { "nombre": "Sal",    "base": 4 } } },
+      "naxos": { "nombre": "Mercado de Naxos", "productos": {
+        "vino":   { "nombre": "Vino",   "base": 11 },
+        "aceite": { "nombre": "Aceite", "base": 8 },
+        "telas":  { "nombre": "Telas",  "base": 16 },
+        "sal":    { "nombre": "Sal",    "base": 7 } } }
+    }
+  },
+  "nodos": {
+    "muelle_rodas": {
+      "_nota": "Dos días de travesía entre islas (distancia 4, velocidad 2). Cada visita al mercado usa la escena de tipo 'mercado'.",
+      "texto": "Día {dia}. Estás en el muelle de Rodas, con {oro} monedas.",
+      "opciones": [
+        { "texto": "Ir al mercado", "destino": "mercado_rodas" },
+        { "texto": "Zarpar hacia Naxos", "efectos": [ { "tipo": "viajar", "distancia": 4 } ], "destino": "muelle_naxos" },
+        { "texto": "Esperar un día", "efectos": [ { "tipo": "pasar_dias", "dias": 1 } ] }
+      ]
+    },
+    "mercado_rodas": { "tipo": "mercado", "mercado": "rodas", "volver": "muelle_rodas", "texto": "Los puestos de Rodas rebosan de género." },
+    "muelle_naxos": {
+      "texto": "Día {dia}. Estás en el muelle de Naxos, con {oro} monedas.",
+      "opciones": [
+        { "texto": "Ir al mercado", "destino": "mercado_naxos" },
+        { "texto": "Zarpar hacia Rodas", "efectos": [ { "tipo": "viajar", "distancia": 4 } ], "destino": "muelle_rodas" },
+        { "texto": "Esperar un día", "efectos": [ { "tipo": "pasar_dias", "dias": 1 } ] }
+      ]
+    },
+    "mercado_naxos": { "tipo": "mercado", "mercado": "naxos", "volver": "muelle_naxos", "texto": "Naxos huele a mar y a especias." },
+    "balance": {
+      "texto": "La temporada ha terminado. Cierras las cuentas con {oro} monedas.",
+      "texto_si": [
+        { "condicion": { "tipo": "stat_min", "stat": "oro", "valor": 100 }, "texto": "Has hecho fortuna: ya eres un mercader respetado en las islas." },
+        { "condicion": { "tipo": "y", "todas": [ { "tipo": "stat_min", "stat": "oro", "valor": 50 }, { "tipo": "stat_max", "stat": "oro", "valor": 99 } ] }, "texto": "Un buen año: has ganado algo de dinero." },
+        { "condicion": { "tipo": "stat_max", "stat": "oro", "valor": 49 }, "texto": "Un año flojo: apenas cubres gastos." }
+      ],
+      "fin": true
+    }
+  }
+}

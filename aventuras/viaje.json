@@ -1,0 +1,86 @@
+{
+  "_leeme": "Demostración de los módulos 'puestos' y 'tiempo' (motor 2.0-alfa). El barco tiene solo 2 remos, así que como mucho reman dos personas aunque haya más gente a bordo; el capitán lleva el timón (si nadie lo lleva, el barco va a la deriva) y también negocia, pero otro puede encargarse. 'fuerza_remo' es lo que cada uno aporta a la velocidad si ocupa un remo. 'etiquetas' da nombres legibles a las estadísticas.",
+  "etiquetas": { "oro": "Oro", "viveres": "Víveres", "dia": "Día", "vida": "Vida", "fuerza_remo": "Fuerza de remo", "carisma": "Carisma", "xp": "XP", "nivel": "Nivel" },
+  "formato": 1,
+  "modulos": ["grupo", "puestos", "experiencia", "tiempo"],
+  "meta": { "id": "viaje_demo", "titulo": "La travesía a Naxos", "inicio": "puerto" },
+  "estadisticas": { "oro": 10, "viveres": 4 },
+  "grupo": {
+    "miembros": {
+      "capitan": { "nombre": "Capitán", "stats": { "vida": 20, "carisma": 2 } },
+      "tomas":   { "nombre": "Tomás",   "stats": { "vida": 16, "fuerza_remo": 2, "carisma": 1 } },
+      "elena":   { "nombre": "Elena",   "stats": { "vida": 14, "fuerza_remo": 1, "carisma": 4 } },
+      "ivan":    { "nombre": "Iván",    "stats": { "vida": 18, "fuerza_remo": 2, "carisma": 1 } }
+    },
+    "inicial": ["capitan"]
+  },
+  "puestos": {
+    "max_por_miembro": 2,
+    "lista": {
+      "timon":      { "nombre": "Timón",      "capacidad": 1, "asignado": ["capitan"] },
+      "remo":       { "nombre": "Remo",       "capacidad": 2 },
+      "negociador": { "nombre": "Negociador", "capacidad": 1, "asignado": ["capitan"] }
+    }
+  },
+  "experiencia": {
+    "niveles": [
+      { "xp": 5,  "mejoras": { "vida": 3 } },
+      { "xp": 10, "mejoras": { "vida": 3, "carisma": 1 } }
+    ]
+  },
+  "tiempo": {
+    "dia_inicial": 1,
+    "velocidad": { "base": 1, "suma_miembros": "fuerza_remo", "puesto": "remo",
+                   "requiere": { "puesto": "timon", "factor": 0.5, "mensaje": "Sin nadie al timón, el barco avanza a la deriva." } },
+    "consumos": [
+      { "stat": "viveres", "por_dia": 1, "por_miembro": true,
+        "si_falta": [ { "tipo": "mod_stat", "quien": "todos", "stat": "vida", "valor": -3 }, { "tipo": "mensaje", "texto": "Pasáis hambre." } ] }
+    ],
+    "plazos": [
+      { "dia": 9, "efectos": [ { "tipo": "mensaje", "texto": "El plazo ha vencido: el mercader de Naxos ya no os espera." }, { "tipo": "ir_a", "destino": "final_tarde" } ] }
+    ]
+  },
+  "nodos": {
+    "puerto": {
+      "_nota": "Planificar: cada marinero contratado come cada día, pero solo suma velocidad si ocupa uno de los 2 remos (panel Puestos). La base 1 es la vela. Al contratar se intenta asignar un remo con 'asignar_puesto'; si no quedan huecos, se dice y hay que reorganizar a mano.",
+      "texto": "Día {dia}. Tenéis {oro} monedas y {viveres} raciones de víveres. El mercader de Naxos espera la carga hasta el día 8.",
+      "opciones": [
+        { "texto": "Comprar víveres (2 monedas por 4 raciones)",
+          "condicion": { "tipo": "stat_min", "stat": "oro", "valor": 2 },
+          "efectos": [ { "tipo": "mod_stat", "stat": "oro", "valor": -2 }, { "tipo": "mod_stat", "stat": "viveres", "valor": 4 } ] },
+        { "texto": "Contratar a Tomás, un remero fuerte (3 monedas)",
+          "condicion": { "tipo": "y", "todas": [ { "tipo": "stat_min", "stat": "oro", "valor": 3 }, { "tipo": "no", "cond": { "tipo": "en_grupo", "id": "tomas" } } ] },
+          "efectos": [ { "tipo": "mod_stat", "stat": "oro", "valor": -3 }, { "tipo": "unirse", "id": "tomas" }, { "tipo": "asignar_puesto", "puesto": "remo", "quien": "tomas" } ] },
+        { "texto": "Contratar a Elena, que habla muy bien (3 monedas)",
+          "condicion": { "tipo": "y", "todas": [ { "tipo": "stat_min", "stat": "oro", "valor": 3 }, { "tipo": "no", "cond": { "tipo": "en_grupo", "id": "elena" } } ] },
+          "efectos": [ { "tipo": "mod_stat", "stat": "oro", "valor": -3 }, { "tipo": "unirse", "id": "elena" }, { "tipo": "asignar_puesto", "puesto": "remo", "quien": "elena" } ] },
+        { "texto": "Contratar a Iván, otro remero fuerte (3 monedas)",
+          "condicion": { "tipo": "y", "todas": [ { "tipo": "stat_min", "stat": "oro", "valor": 3 }, { "tipo": "no", "cond": { "tipo": "en_grupo", "id": "ivan" } } ] },
+          "efectos": [ { "tipo": "mod_stat", "stat": "oro", "valor": -3 }, { "tipo": "unirse", "id": "ivan" }, { "tipo": "asignar_puesto", "puesto": "remo", "quien": "ivan" } ] },
+        { "texto": "Esperar un día en el puerto", "efectos": [ { "tipo": "pasar_dias", "dias": 1 } ] },
+        { "texto": "Zarpar hacia Naxos", "efectos": [ { "tipo": "viajar", "distancia": 15 } ], "destino": "naxos" }
+      ]
+    },
+    "naxos": {
+      "_nota": "Si el viaje se alarga hasta el día 9, el plazo lo interrumpe con 'ir_a' y nunca se llega aquí. 'Regatear' solo aparece si quien ocupa el puesto de negociador tiene carisma 4 o más (quien: 'puesto:negociador'). La experiencia no depende de los combates: llegar a salvo da XP a quienes siguen en pie (con un extra para quien lleva el timón) y regatear bien se la da a quien negocia.",
+      "al_entrar": [
+        { "tipo": "dar_xp", "cantidad": 3 },
+        { "tipo": "dar_xp", "quien": "puesto:timon", "cantidad": 2 }
+      ],
+      "texto": "Atracáis en Naxos el día {dia}. Os quedan {viveres} raciones.",
+      "opciones": [
+        { "texto": "Entregar la carga al mercader", "destino": "final_exito" },
+        { "texto": "Regatear el pago",
+          "condicion": { "tipo": "stat_min", "quien": "puesto:negociador", "stat": "carisma", "valor": 4 },
+          "efectos": [ { "tipo": "mod_stat", "stat": "oro", "valor": 5 }, { "tipo": "mensaje", "texto": "Vuestro negociador arranca un trato mejor." }, { "tipo": "dar_xp", "quien": "puesto:negociador", "cantidad": 4 } ],
+          "destino": "final_exito" }
+      ]
+    },
+    "final_exito": {
+      "texto": "Entregáis la carga a tiempo, el día {dia}. Termináis con {oro} monedas.",
+      "texto_si": [ { "condicion": { "tipo": "stat_max", "quien": "capitan", "stat": "vida", "valor": 10 }, "texto": "El capitán apenas se tiene en pie: el hambre ha hecho mella." } ],
+      "fin": true
+    },
+    "final_tarde": { "texto": "Llegáis tarde: el mercader ya vendió el vino a otro barco. El viaje ha sido en vano.", "fin": true }
+  }
+}

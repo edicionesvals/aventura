@@ -1,0 +1,8 @@
+[
+  { "titulo": "La llave del sótano (ejemplo 1.2)", "archivo": "aventuras/ejemplo.json" },
+  { "titulo": "El paso del desfiladero (demo de grupo y combate múltiple)", "archivo": "aventuras/grupo.json" },
+  { "titulo": "La travesía a Naxos (demo de tiempo, víveres y puestos)", "archivo": "aventuras/viaje.json" },
+  { "titulo": "El mercader de las islas (demo de mercados)", "archivo": "aventuras/comercio.json" },
+  { "titulo": "Unidad Aurora (prototipo)", "archivo": "aventuras/agencia.json" },
+  { "titulo": "Unidad Aurora (versión completa)", "archivo": "aventuras/aurora.json" }
+]

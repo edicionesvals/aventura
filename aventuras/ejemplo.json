@@ -1,0 +1,122 @@
+{
+  "_leeme": "Aventura de muestra del motor 1.2. Las claves que empiezan por _ son notas para quien lee el archivo; el motor las ignora. Aquí no se usa la opción 'bloqueada' (mostrar una opción desactivada con su motivo): se prefiere el prueba y error, y los intentos fallidos se cuentan dentro de la historia.",
+  "formato": 1,
+  "modulos": ["combate", "experiencia"],
+  "comunes": ["oro", "dias"],
+  "experiencia": { "niveles": [ { "xp": 5, "mejoras": { "vida": 3, "fuerza": 1 }, "mensaje": "¡Esa rata te ha enseñado a pelear!" } ] },
+  "etiquetas": { "xp": "XP", "nivel": "Nivel", "vida": "Vida", "fuerza": "Fuerza", "defensa": "Defensa", "oro": "Oro", "dias": "Días" },
+  "meta": { "id": "ejemplo12", "titulo": "La llave del sótano", "inicio": "taberna", "protagonista": "Aventurero" },
+  "estadisticas": { "vida": 20, "fuerza": 2, "defensa": 1, "oro": 8, "dias": 0 },
+  "objetos": {
+    "llave":   { "nombre": "Llave oxidada" },
+    "pocion":  { "nombre": "Poción", "usable": true,
+                 "efectos": [ { "tipo": "mod_stat", "stat": "vida", "valor": 10 } ] },
+    "lampara": { "nombre": "Lámpara de aceite", "usable": true, "consumible": false,
+                 "efectos": [ { "tipo": "flag", "flag": "lampara_encendida" },
+                              { "tipo": "mensaje", "texto": "La lámpara arde con una llama estable." } ] }
+  },
+  "enemigos": {
+    "rata": { "nombre": "Rata gigante", "vida": 10, "ataque": 2, "defensa": 1, "xp": 6,
+              "recompensa": [ { "tipo": "mod_stat", "stat": "oro", "valor": 4 } ] }
+  },
+  "nodos": {
+    "taberna": {
+      "_nota": "Escena inicial. Muestra: variables {oro} {vida} {dias} en el texto; texto_si (párrafos según lo ocurrido); opciones sin destino (se quedan aquí) con efectos y mensaje; la condición 'o' (la fuerza 4 no se alcanza en esta aventura, solo es un ejemplo) y su contraria con 'no': un intento que falla se cuenta en la historia, sin avisar de lo que falta.",
+      "texto": "Estás en la taberna del Gallo Cojo. Tienes {oro} monedas, {vida} de vida y llevas {dias} días en el pueblo.",
+      "texto_si": [
+        { "condicion": { "tipo": "no_flag", "flag": "llave_cogida" }, "texto": "Sobre la barra hay una llave oxidada." },
+        { "condicion": { "tipo": "flag", "flag": "llave_cogida" }, "texto": "La barra está vacía ahora que tienes la llave." }
+      ],
+      "opciones": [
+        { "texto": "Hablar con el tabernero", "destino": "tabernero" },
+        { "texto": "Ir al mercado (a media jornada de camino)", "destino": "mercado" },
+        { "texto": "Coger la llave",
+          "condicion": { "tipo": "no_flag", "flag": "llave_cogida" },
+          "efectos": [ { "tipo": "dar_objeto", "id": "llave" }, { "tipo": "flag", "flag": "llave_cogida" } ] },
+        { "texto": "Descansar en la posada (1 moneda, pasa un día)",
+          "condicion": { "tipo": "stat_min", "stat": "oro", "valor": 1 },
+          "efectos": [ { "tipo": "mod_stat", "stat": "oro", "valor": -1 },
+                       { "tipo": "mod_stat", "stat": "vida", "valor": 8 },
+                       { "tipo": "mod_stat", "stat": "dias", "valor": 1 },
+                       { "tipo": "mensaje", "texto": "Duermes y recuperas fuerzas. Pasa un día." } ] },
+        { "texto": "Bajar al sótano",
+          "condicion": { "tipo": "o", "alguna": [ { "tipo": "tiene_objeto", "id": "llave" }, { "tipo": "stat_min", "stat": "fuerza", "valor": 4 } ] },
+          "destino": "sotano" },
+        { "texto": "Probar la trampilla del suelo",
+          "condicion": { "tipo": "no", "cond": { "tipo": "o", "alguna": [ { "tipo": "tiene_objeto", "id": "llave" }, { "tipo": "stat_min", "stat": "fuerza", "valor": 4 } ] } },
+          "efectos": [ { "tipo": "mensaje", "texto": "Está cerrada con un candado. No cede." } ] },
+        { "texto": "Olvidarte del sótano y esperar a la fiesta",
+          "condicion": { "tipo": "stat_min", "stat": "dias", "valor": 2 }, "destino": "final_fiesta" },
+        { "texto": "Marcharte del pueblo", "destino": "final_prudente" }
+      ]
+    },
+    "tabernero": {
+      "_nota": "Diálogo: opciones que se quedan en la escena y responden con 'mensaje'; los flags recuerdan lo ya preguntado.",
+      "texto": "—Bienvenido, forastero. ¿Qué deseas saber?",
+      "opciones": [
+        { "texto": "Preguntar por el sótano",
+          "condicion": { "tipo": "no_flag", "flag": "sabe_sotano" },
+          "efectos": [ { "tipo": "mensaje", "texto": "—Hay una rata enorme ahí abajo, y sin luz no verás nada." }, { "tipo": "flag", "flag": "sabe_sotano" } ] },
+        { "texto": "Preguntar de nuevo por el sótano",
+          "condicion": { "tipo": "flag", "flag": "sabe_sotano" },
+          "efectos": [ { "tipo": "mensaje", "texto": "—Ya te lo dije: pega fuerte y allí no se ve nada sin una lámpara." } ] },
+        { "texto": "Preguntar por el mercader",
+          "efectos": [ { "tipo": "mensaje", "texto": "—Recoge el puesto pasado el segundo día. No tardes." } ] },
+        { "texto": "Despedirte", "destino": "taberna" }
+      ]
+    },
+    "mercado": {
+      "_nota": "al_entrar: cada visita cuesta un día. stat_max: el mercader solo vende hasta el día 2. La condición 'y' junta varias; las opciones que no se cumplen se ocultan (no llevan 'bloqueada'). Cada compra se hace una sola vez gracias a su flag.",
+      "al_entrar": [ { "tipo": "mod_stat", "stat": "dias", "valor": 1 } ],
+      "texto": "El mercader despliega su puesto. Tienes {oro} monedas. Es el día {dias}.",
+      "texto_si": [ { "condicion": { "tipo": "stat_min", "stat": "dias", "valor": 3 }, "texto": "El puesto está recogido: llegas tarde." } ],
+      "opciones": [
+        { "texto": "Comprar una poción (3 monedas)",
+          "condicion": { "tipo": "y", "todas": [ { "tipo": "no_flag", "flag": "pocion_comprada" }, { "tipo": "stat_max", "stat": "dias", "valor": 2 }, { "tipo": "stat_min", "stat": "oro", "valor": 3 } ] },
+          "efectos": [ { "tipo": "mod_stat", "stat": "oro", "valor": -3 }, { "tipo": "dar_objeto", "id": "pocion" }, { "tipo": "flag", "flag": "pocion_comprada" } ] },
+        { "texto": "Comprar una lámpara (4 monedas)",
+          "condicion": { "tipo": "y", "todas": [ { "tipo": "no_flag", "flag": "lampara_comprada" }, { "tipo": "stat_max", "stat": "dias", "valor": 2 }, { "tipo": "stat_min", "stat": "oro", "valor": 4 } ] },
+          "efectos": [ { "tipo": "mod_stat", "stat": "oro", "valor": -4 }, { "tipo": "dar_objeto", "id": "lampara" }, { "tipo": "flag", "flag": "lampara_comprada" } ] },
+        { "texto": "Volver a la taberna", "destino": "taberna" }
+      ]
+    },
+    "sotano": {
+      "_nota": "texto_si con la condición 'no'. La lámpara es un objeto usable que no se gasta (consumible: false): se enciende con el botón Usar del inventario, y eso activa el flag que habilita la opción de avanzar; sin él, el intento de avanzar falla en la historia.",
+      "texto": "Bajas la escalera de piedra. Huele a humedad.",
+      "texto_si": [
+        { "condicion": { "tipo": "no", "cond": { "tipo": "flag", "flag": "lampara_encendida" } }, "texto": "Está tan oscuro que no ves ni tus manos." }
+      ],
+      "opciones": [
+        { "texto": "Avanzar hasta el fondo",
+          "condicion": { "tipo": "flag", "flag": "lampara_encendida" }, "destino": "guarida" },
+        { "texto": "Tantear la oscuridad con las manos",
+          "condicion": { "tipo": "no_flag", "flag": "lampara_encendida" },
+          "efectos": [ { "tipo": "mensaje", "texto": "Tropiezas con algo viscoso. Sin luz no te atreves a seguir." } ] },
+        { "texto": "Subir a la taberna", "destino": "taberna" }
+      ]
+    },
+    "guarida": {
+      "_nota": "Escena de combate (módulo 'combate'): enemigo, y destinos para victoria, derrota y huida. La recompensa del enemigo se define en 'enemigos'.",
+      "tipo": "combate", "enemigo": "rata",
+      "texto": "Una rata gigante te corta el paso entre chillidos.",
+      "victoria": "cofre", "derrota": "final_derrota", "huida": "sotano"
+    },
+    "cofre": {
+      "texto": "La rata yace a tus pies. Al fondo hay un cofre cerrado.",
+      "opciones": [
+        { "texto": "Abrir el cofre", "destino": "final_tesoro" },
+        { "texto": "Dejarlo y marcharte", "destino": "final_prudente" }
+      ]
+    },
+    "final_tesoro": {
+      "_nota": "Final con al_entrar (recompensa) y texto_si dentro del final.",
+      "al_entrar": [ { "tipo": "mod_stat", "stat": "oro", "valor": 10 } ],
+      "texto": "Dentro del cofre brillan monedas de plata. Terminas con {oro} monedas.",
+      "texto_si": [ { "condicion": { "tipo": "tiene_objeto", "id": "pocion" }, "texto": "Aún conservas tu poción para la próxima aventura." } ],
+      "fin": true
+    },
+    "final_prudente": { "texto": "Decides que no merece la pena arriesgarse y te marchas sin más.", "fin": true },
+    "final_fiesta": { "texto": "Llega la fiesta de la cosecha y el sótano se te olvida entre canciones y vino.", "fin": true },
+    "final_derrota": { "texto": "La rata te vence en la oscuridad. Tu aventura termina aquí.", "fin": true }
+  }
+}
