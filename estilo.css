@@ -1,0 +1,111 @@
+/* Variables CSS (custom properties): defines los colores una vez y los reutilizas.
+   Diseño "mobile first": lo básico sirve para móvil; solo se amplía si hay más ancho. */
+:root {
+  --fondo: #f2f5f4;  --superficie: #ffffff;  --texto: #1d2630;
+  --suave: #e3ebe9;  --borde: #c5d2cf;       --acento: #1f6f78;  --aviso: #a33b3b;
+}
+/* Modo oscuro automático según el ajuste del sistema del usuario */
+@media (prefers-color-scheme: dark) {
+  :root { --fondo: #141b22; --superficie: #1b252e; --texto: #dfe6e4;
+          --suave: #26323c; --borde: #2f3d49;      --acento: #6cc3c6; --aviso: #e08a8a; }
+}
+* { box-sizing: border-box; }   /* el padding y el borde cuentan dentro del ancho: más predecible */
+body {
+  margin: 0; background: var(--fondo); color: var(--texto);
+  font: 1.125rem/1.6 "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+main { max-width: 40rem; margin: 0 auto; padding: 0 1rem 2rem; }   /* líneas cortas = más legible */
+
+/* ---------- Barra superior (fija): título, deshacer, menú y estadísticas ---------- */
+.barra-superior {
+  position: sticky; top: 0; z-index: 5; background: var(--fondo);
+  padding-top: env(safe-area-inset-top); border-bottom: 1px solid var(--borde);
+}
+.cabecera { display: flex; align-items: center; gap: .5rem; padding: .4rem 0; }
+.cabecera h1 { flex: 1; margin: 0; font-size: 1.2rem; line-height: 1.2; }
+.icono, .menu summary {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.75rem; min-height: 2.75rem; padding: 0; font-size: 1.3rem; cursor: pointer;
+  color: var(--texto); background: var(--superficie); border: 1px solid var(--borde); border-radius: .5rem;
+  list-style: none;   /* quita el triángulo de <summary> */
+}
+.menu summary::-webkit-details-marker { display: none; }
+.menu { position: relative; }
+.menu-panel {   /* el menú se despliega sobre el contenido, pegado a la derecha */
+  position: absolute; right: 0; top: calc(100% + .4rem); z-index: 10; width: min(21rem, 88vw);
+  display: flex; flex-direction: column; gap: .6rem; padding: .8rem;
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: .6rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .25); font-size: 1rem;
+}
+.menu-panel label:not(.boton) { display: flex; flex-direction: column; gap: .2rem; font-size: .9rem; }
+.menu-panel hr { width: 100%; border: 0; border-top: 1px solid var(--borde); margin: .1rem 0; }
+.fila { display: flex; flex-wrap: wrap; gap: .5rem; }   /* flex-wrap: se reparte en varias líneas si no cabe */
+.fila > * { flex: 1 1 8rem; }
+
+/* Estadísticas como "chips" */
+#estado { display: flex; flex-wrap: wrap; gap: .35rem; padding: 0 0 .5rem; font: .9rem system-ui, sans-serif; }
+#estado:empty { display: none; }
+.chip { background: var(--superficie); border: 1px solid var(--borde); border-radius: 999px; padding: .05rem .7rem; }
+.chip .etq { color: var(--acento); margin-right: .35rem; }
+.chip.combate { border-color: var(--acento); }
+
+#aviso { margin: .6rem 0 0; color: var(--aviso); white-space: pre-line; }   /* pre-line respeta los saltos de línea */
+#aviso:empty { display: none; }
+
+/* ---------- Pantalla de juego ---------- */
+.pantalla { display: grid; gap: 1rem; }
+#texto {
+  margin-top: 1rem; padding: .6rem 1rem; background: var(--superficie);
+  border: 1px solid var(--borde); border-radius: .6rem;
+}
+#texto p { margin: .5rem 0; }
+.registro { border-left: 3px solid var(--acento); padding-left: .7rem; font-style: italic; color: var(--acento); }
+.fin { font-weight: bold; text-align: center; }
+.turno { font-weight: bold; margin: .6rem 0 .2rem; }   /* "Turno de Aria" en el combate de grupo */
+
+/* Botones (las opciones son lo principal: anchas y cómodas para el dedo) */
+button, select, .boton {
+  font: inherit; font-size: 1rem; color: var(--texto); background: var(--superficie);
+  border: 1px solid var(--acento); border-radius: .5rem; padding: .6rem .9rem; min-height: 2.75rem;   /* ~44px */
+  cursor: pointer;
+}
+button:hover:not(:disabled), .boton:hover { background: var(--suave); }
+button:disabled { opacity: .55; cursor: not-allowed; border-style: dashed; }   /* opción bloqueada: visible pero no pulsable */
+button:focus-visible, .boton:focus-within, select:focus-visible, summary:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+#opciones button { display: block; width: 100%; margin: .45rem 0; text-align: left; }
+.boton { display: inline-flex; align-items: center; justify-content: center; text-align: center; }
+.icono { border-color: var(--borde); }
+
+/* ---------- Paneles laterales: grupo, puestos, inventario ---------- */
+.lateral details {
+  margin: 0 0 .6rem; padding: .2rem .8rem; background: var(--superficie);
+  border: 1px solid var(--borde); border-radius: .6rem;
+}
+.lateral summary { cursor: pointer; font-weight: bold; padding: .45rem 0; }
+.miembros { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));   /* auto-fit: una sola ficha ocupa todo el ancho */ gap: .5rem; padding-bottom: .6rem; }
+.miembro { border: 1px solid var(--borde); border-radius: .5rem; padding: .4rem .6rem; }
+.miembro h2 { margin: 0; font-size: 1rem; }
+.stats { margin: .1rem 0 .3rem; font-size: .85rem; color: var(--acento); }
+.vacio { margin: .2rem 0; font-size: .85rem; opacity: .7; }   /* "Sin objetos" */
+.objeto { display: flex; justify-content: space-between; align-items: center; gap: .4rem; padding: .15rem 0; font-size: .9rem; border-top: 1px dashed var(--borde); }
+.objeto button { min-height: 2rem; padding: .1rem .6rem; }
+.puesto-titulo { margin: .4rem 0 .2rem; font-size: .95rem; }
+.fila-puesto { display: flex; flex-wrap: wrap; gap: .4rem; padding-bottom: .4rem; }
+.fila-puesto button { min-height: 2.25rem; padding: .3rem .7rem; }
+.fila-puesto button.activo { background: var(--suave); font-weight: bold; }
+
+/* ---------- Pantallas anchas: historia a la izquierda, paneles a la derecha ---------- */
+@media (min-width: 52rem) {
+  main { max-width: 62rem; }
+  .pantalla { grid-template-columns: minmax(0, 1fr) 18rem; align-items: start; }
+  .lateral { position: sticky; top: 6rem; margin-top: 1rem; }
+}
+
+/* Habilidades que solo valen en combate (texto, no botón) y filas de mercancías */
+.solo-combate { padding: .3rem .6rem; font-size: .9rem; opacity: .8; border: 1px dashed var(--borde); border-radius: .5rem; }
+.producto { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; padding: .35rem 0; border-top: 1px solid var(--borde); }
+.producto span { flex: 1 1 100%; font-size: .95rem; }
+.producto button { min-height: 2.25rem; padding: .3rem .8rem; }
+
+.puestos-ficha { margin: .1rem 0 .3rem; font-size: .85rem; font-style: italic; }   /* "Puesto: Cara" en la ficha */

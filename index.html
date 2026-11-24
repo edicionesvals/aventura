@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <!-- viewport: sin esta línea el móvil dibuja la página como si fuera de escritorio y la encoge.
+       viewport-fit=cover deja usar toda la pantalla; el CSS respeta las zonas seguras (muescas). -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Motor de aventuras</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <main>
+    <!-- Barra superior: se queda fija arriba. Lo imprescindible a la vista; lo demás, en el menú (☰). -->
+    <div class="barra-superior">
+      <header class="cabecera">
+        <h1 id="titulo">Aventuras</h1>
+        <button id="btn-deshacer" class="icono" title="Deshacer el último paso" aria-label="Deshacer el último paso">↶</button>
+        <details id="menu" class="menu">
+          <summary aria-label="Menú">☰</summary>
+          <div class="menu-panel">
+            <label>Aventura <select id="selector"></select></label>
+            <label class="boton">Abrir aventura (.json)
+              <input type="file" id="archivo-aventura" accept=".json" hidden>
+            </label>
+            <hr>
+            <label>Ranura de guardado <select id="ranura" aria-label="Ranura de guardado"></select></label>
+            <div class="fila">
+              <button id="btn-guardar">Guardar</button>
+              <button id="btn-cargar">Cargar</button>
+            </div>
+            <div class="fila">
+              <button id="btn-exportar">Exportar partida</button>
+              <label class="boton">Importar partida
+                <input type="file" id="archivo-partida" accept=".json" hidden>
+              </label>
+            </div>
+            <hr>
+            <button id="btn-nueva">Empezar de nuevo</button>
+          </div>
+        </details>
+      </header>
+      <div id="estado"></div>   <!-- estadísticas comunes (oro, víveres, día...) como "chips" -->
+    </div>
+
+    <p id="aviso"></p>
+
+    <!-- Pantalla de juego: en móvil, una columna (historia primero); en pantallas anchas, historia a la
+         izquierda y paneles (grupo, puestos, inventario) a la derecha. -->
+    <div class="pantalla">
+      <section class="historia">
+        <div id="texto" aria-live="polite"></div> <!-- aria-live: los lectores de pantalla leen los cambios -->
+        <div id="opciones"></div>
+      </section>
+      <aside class="lateral">
+        <div id="grupo"></div>   <!-- zona de personajes y paneles de los módulos (puestos...) -->
+      </aside>
+    </div>
+  </main>
+
+  <!-- type="module": modo estricto y se ejecuta cuando el HTML ya está cargado.
+       Requiere servidor (local o GitHub Pages), no funciona con doble clic. -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
